@@ -1,4 +1,11 @@
 const criptomonedaSelect = document.querySelector('#criptomonedas');
+const monedaSelect = document.querySelector('#moneda');
+const formulario = document.querySelector('#formulario');
+
+const objBusqueda = {
+    moneda: '',
+    criptomoneda: ''
+}
 
 // Crear promise
 const obtenerCriptomoneda = criptomonedas => new Promise(resolve => {
@@ -6,10 +13,13 @@ const obtenerCriptomoneda = criptomonedas => new Promise(resolve => {
 })
 
 document.addEventListener('DOMContentLoaded', () => {
-    conssultaCritomonedas();
+    consultaCriptomonedas();
+    formulario.addEventListener('submit', submitFormulario);
+    criptomonedaSelect.addEventListener('change', leerValor);
+    monedaSelect.addEventListener('change', leerValor);
 })
 
-function conssultaCritomonedas() {
+function consultaCriptomonedas() {
     const url = 'https://min-api.cryptocompare.com/data/top/mktcapfull?limit=10&tsym=USD'
 
     fetch(url)
@@ -28,4 +38,24 @@ function selecionarCriptomoneda(criptomonedas) {
 
         criptomonedaSelect.appendChild(option);
     });
+}
+
+function leerValor(e) {
+    objBusqueda[e.target.name] = e.target.value;
+    console.log(objBusqueda);
+}
+
+function submitFormulario(e) {
+    e.preventDefault();
+
+    const { moneda, criptomoneda } = objBusqueda;
+
+    if (moneda === '' | criptomoneda === '') {
+        mostrarAlerta('Todos los campos son obligatorios');
+        return
+    }
+}
+
+function mostrarAlerta(mensaje) {
+    console.log(mensaje);
 }
